@@ -25,14 +25,14 @@
     <thead>
         <th scope="col">Symbol</th>
         <th scope="col">Description</th>
-        <th scope="col">Quantity</th>
+        <th scope="col">Free</th>
         <th scope="col">Transfer</th>
       </thead>
     <tbody>
-        <tr *ngFor="let asset of assets; let i = index ">
-            <th scope="row" class="cell">{{ asset.symbol }}</th>
-            <th scope="row" class="cell">{{ asset.description }}</th>
-            <th scope="row" class="cell">0</th>
+        <tr *ngFor="let balance of balances; let i = index ">
+            <th scope="row" class="cell">{{ balance.symbol }}</th>
+            <th scope="row" class="cell">{{ balance.description }}</th>
+            <th scope="row" class="cell">{{ balance.free }}</th>
             <th scope="row"><button (click)="transfer(i)">Transfer</button></th>
         </tr>
     </tbody>

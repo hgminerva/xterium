@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Address } from '../../models/address';
-import { mnemonicGenerate, mnemonicValidate, mnemonicToMiniSecret, ed25519PairFromSeed, encodeAddress } from '@polkadot/util-crypto';
+import { mnemonicGenerate, mnemonicValidate, mnemonicToMiniSecret, sr25519PairFromSeed, encodeAddress } from '@polkadot/util-crypto';
 import { u8aToHex} from '@polkadot/util';
 
 @Component({
@@ -54,7 +54,7 @@ export class AddressDetailComponent {
   createKeys(): void {
     if(mnemonicValidate(this.mnemonicKey)) {
       const seed = mnemonicToMiniSecret(this.mnemonicKey);
-      const { publicKey, secretKey } = ed25519PairFromSeed(seed);
+      const { publicKey, secretKey } = sr25519PairFromSeed(seed);
       this.publicKey = encodeAddress(publicKey);
       this.secretKey = u8aToHex(secretKey);
     } else {

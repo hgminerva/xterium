@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Address } from '../../models/address';
-import { Asset } from '../../models/asset';
+import { Balance } from '../../models/balance';
+import { BalanceService } from '../../services/balance-service';
 
 @Component({
   selector: 'balance',
@@ -14,7 +15,7 @@ import { Asset } from '../../models/asset';
 })
 export class BalanceComponent {
   addresses: Array<Address> = [];
-  assets: Array<Asset> = [];
+  balances: Array<Balance> = [];
 
   message: string = "";
   
@@ -22,23 +23,36 @@ export class BalanceComponent {
   publicKey: string = "";
 
   constructor(
-    private cookieservice: CookieService
+    private cookieservice: CookieService,
+    private balanceService: BalanceService,
   ) {
     if (this.cookieservice.check('addresses') == true) {
       this.addresses = JSON.parse(this.cookieservice.get('addresses'));
       this.message = "Addresses extracted from storage";
       if (this.cookieservice.check('balanceAddress') == true) {
         this.publicKey = this.cookieservice.get('balanceAddress');
-        if (this.cookieservice.check('assets') == true) {
-          this.assets = JSON.parse(this.cookieservice.get('assets'));
-          this.message = "Assets extracted from storage"
-        } else {
-          this.message = "The address has no assets"
-        }
+        this.getBalances();
       }
     } else {
       this.message = "No addresses";
     }
+  }
+
+  getBalances(): void {
+    this.balanceService.getSubstrateBalance(this.network,this.publicKey).then(data => {
+      if (data.length > 0) {
+        for(let i=0;i<data.length;i++) {
+          this.balances.push({
+            assetType: data[i].assetType,
+            symbol: data[i].symbol,
+            description: data[i].description,
+            free: data[i].free,
+            reserved: data[i].reserved,
+          })
+        }
+        console.log(this.balances);
+      }
+    });
   }
 
   onAddressChange(): void {
