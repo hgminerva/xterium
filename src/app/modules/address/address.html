@@ -1,0 +1,21 @@
+<h1>Address</h1>
+
+<hr>
+<table>
+    <thead>
+        <th scope="col">Address</th>
+        <th scope="col">Delete</th>
+      </thead>
+    <tbody>
+        <tr *ngFor="let address of addresses; let i = index ">
+            <th scope="row" class="cell">{{ address.publicKey}}</th>
+            <th scope="row"><button (click)="delete(i)">Delete</button></th>
+        </tr>
+    </tbody>
+</table>
+
+<hr>
+<button (click)="add()">Add New Address</button>
+
+<hr>
+{{message}}

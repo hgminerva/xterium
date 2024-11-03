@@ -1,0 +1,41 @@
+<h1>Address Detail</h1>
+
+<hr>
+
+<span>
+    Address Type:
+    <br>
+    <select [(ngModel)]="addressType">
+        <option value="Xode">Xode</option>
+        <option value="Kusama">Kusama</option>
+        <option value="Polkadot">Polkadot</option>
+    </select>
+</span>
+<br>
+<span>
+    Mnemonic Phrase:
+    <br>
+    <textarea rows="3" cols="35" [(ngModel)]="mnemonicKey"></textarea>
+    <br>
+    <button (click)="generate()">Generate</button>
+    <button (click)="createKeys()">Create Keys</button>
+</span>    
+<br>
+<span>
+    Secret Key:
+    <br>
+    <textarea rows="3" cols="35" [(ngModel)]="secretKey" disabled></textarea>
+</span>    
+<br>
+<span>
+    Public Key:
+    <br>
+    <textarea rows="3" cols="35" [(ngModel)]="publicKey" disabled></textarea>
+</span>    
+
+<hr>
+<button (click)="saveToCookie()">Save</button>
+<button (click)="close()">Close</button>
+<hr>
+
+{{message}}

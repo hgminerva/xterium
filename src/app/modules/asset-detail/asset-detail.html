@@ -1,0 +1,50 @@
+<h1>Asset Detail</h1>
+
+<hr>
+<span>
+    Asset Type:
+    <br>
+    <select [(ngModel)]="assetType">
+        <option value="Native">Native</option>
+        <option value="Asset">Asset</option>
+        <option value="Contract">Contract</option>
+    </select>
+</span>
+<br>
+
+<span>
+    Network:
+    <br>
+    <select [(ngModel)]="network">
+        <option value="Xode">Xode</option>
+    </select>
+</span>
+<br>
+
+<span>
+    Network Id: (0 if Native)
+    <br>
+    <input  [(ngModel)]="networkId" type="text" />
+</span>    
+<br>
+
+<span>
+    Symbol:
+    <br>
+    <input  [(ngModel)]="symbol" type="text"/>
+</span>    
+<br>
+
+<span>
+    Description:
+    <br>
+    <input  [(ngModel)]="description" type="text" />
+</span>    
+<br>
+
+<hr>
+<button (click)="saveToCookie()">Save</button>
+<button (click)="close()">Close</button>
+<hr>
+
+{{message}}

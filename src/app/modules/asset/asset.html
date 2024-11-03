@@ -1,0 +1,29 @@
+<h1>Asset</h1>
+
+<hr>
+<table>
+    <thead>
+        <th scope="col">Network</th>
+        <th scope="col">Type</th>
+        <th scope="col">Id</th>
+        <th scope="col">Symbol</th>
+        <th scope="col">Description</th>
+        <th scope="col">Delete</th>
+      </thead>
+    <tbody>
+        <tr *ngFor="let asset of assets; let i = index ">
+            <th scope="row" class="cell">{{ asset.network }}</th>
+            <th scope="row" class="cell">{{ asset.assetType }}</th>
+            <th scope="row" class="cell">{{ asset.networkId }}</th>
+            <th scope="row" class="cell">{{ asset.symbol }}</th>
+            <th scope="row" class="cell">{{ asset.description }}</th>
+            <th scope="row"><button (click)="delete(i)">Delete</button></th>
+        </tr>
+    </tbody>
+</table>
+
+<hr>
+<button (click)="add()">Add New Asset</button>
+
+<hr>
+{{message}}

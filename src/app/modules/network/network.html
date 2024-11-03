@@ -1,0 +1,8 @@
+<h1>Network</h1>
+<hr>
+Xode:
+<input type="text" [value]="rpc_address"  style="width: 80%;" #rpc_address_input>
+<hr>
+<button (click)="saveToCookie(rpc_address_input.value)">Save</button>
+<hr>
+{{message}}

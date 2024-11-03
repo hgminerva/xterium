@@ -1,0 +1,25 @@
+.window {
+    height: 500px;
+    width: 600px;
+}
+
+  .left {
+    display:inline-block;
+    height: 100%;
+    width: 25%;
+    vertical-align: top;
+    background-color: burlywood;
+  }
+
+  .right {
+    display:inline-block;
+    height: 100%;
+    width: 75%;
+    vertical-align: top;
+    background-color: antiquewhite;
+  }
+
+  .footer {
+    font-size: small;
+    color: gray;
+  }
