@@ -24,12 +24,6 @@ export class BalanceService {
 
       let { data: { free, reserved }, nonce } = await api.query.system.account(publicKey);
 
-      console.log(
-        'nonce=', nonce.toNumber(),
-        'free=', free.toString(),
-        'reserved=', reserved.toString()
-      );
-
       if (this.cookieservice.check('assets') == true) {
         let assets: Array<Asset> = [];
         assets = JSON.parse(this.cookieservice.get('assets'));
@@ -40,7 +34,12 @@ export class BalanceService {
             if (asset.assetType=="Native") {
               freeBalance = free.toString();
               reservedBalance = reserved.toString();
+            } else if(asset.assetType=="Asset") {
+              const data = await api.query.assets.account(asset.networkId, publicKey);
+              const humanData = (data.toHuman() as { [key: string]: any })["balance"] as string
+              freeBalance = humanData.split(',').join('');
             }
+
             const balance: Balance = {
                 assetType: asset.assetType,
                 symbol: asset.symbol,
