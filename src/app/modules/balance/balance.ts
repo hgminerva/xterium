@@ -29,16 +29,17 @@ export class BalanceComponent {
     if (this.cookieservice.check('addresses') == true) {
       this.addresses = JSON.parse(this.cookieservice.get('addresses'));
       this.message = "Addresses extracted from storage";
-      if (this.cookieservice.check('balanceAddress') == true) {
-        this.publicKey = this.cookieservice.get('balanceAddress');
-        this.getBalances();
-      }
+      this.publicKey = this.cookieservice.get('balanceAddress');
+      this.getBalances();
     } else {
       this.message = "No addresses";
     }
   }
 
   getBalances(): void {
+    // Clean the balances
+    this.balances = [];
+
     this.balanceService.getSubstrateBalance(this.network,this.publicKey).then(data => {
       if (data.length > 0) {
         for(let i=0;i<data.length;i++) {
@@ -50,14 +51,15 @@ export class BalanceComponent {
             reserved: data[i].reserved,
           })
         }
-        console.log(this.balances);
-      }
+      } 
     });
   }
 
   onAddressChange(): void {
     this.cookieservice.set('balanceAddress',this.publicKey);
     this.message = this.publicKey + " is stored";
+
+    this.getBalances();
   }
 
   transfer(assetIndex: number) {

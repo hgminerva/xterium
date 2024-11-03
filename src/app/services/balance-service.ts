@@ -18,17 +18,25 @@ export class BalanceService {
     let balances: Array<Balance> = [];
 
     if (this.cookieservice.check('network') == true) {
+
+      // Get the native coin balance
       const rpc = this.cookieservice.get('network');
       const wsProvider = new WsProvider(rpc);
       const api = await ApiPromise.create({ provider: wsProvider });
-
       let { data: { free, reserved }, nonce } = await api.query.system.account(publicKey);
 
+      // Display the balance
       if (this.cookieservice.check('assets') == true) {
+        
+        // Get all the asset in the wallet
         let assets: Array<Asset> = [];
         assets = JSON.parse(this.cookieservice.get('assets'));
+
         for (const asset of assets) {
+
+          // Display only asset on that network
           if(asset.network==network) {
+
             let freeBalance: string = "0";
             let reservedBalance: string = "0";
             if (asset.assetType=="Native") {
@@ -36,8 +44,10 @@ export class BalanceService {
               reservedBalance = reserved.toString();
             } else if(asset.assetType=="Asset") {
               const data = await api.query.assets.account(asset.networkId, publicKey);
-              const humanData = (data.toHuman() as { [key: string]: any })["balance"] as string
-              freeBalance = humanData.split(',').join('');
+              if (data.toHuman() != null) {
+                const humanData = (data.toHuman() as { [key: string]: any })["balance"] as string
+                freeBalance = humanData.split(',').join('');
+              }
             }
 
             const balance: Balance = {
@@ -46,14 +56,14 @@ export class BalanceService {
                 description: asset.description,
                 free: freeBalance,
                 reserved: reservedBalance,
-              };
+            };
+
             balances.push(balance);
+
           }
         } 
       }
-
     }
-
     return balances;
   }
 
