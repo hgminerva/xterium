@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from "rxjs";
 import { CookieService } from 'ngx-cookie-service';
 import { Asset } from '../models/asset';
 import { Balance } from '../models/balance';
 
 import '@polkadot/api-augment';
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { u128 } from '@polkadot/types';
 
 @Injectable({
   providedIn: 'root',
@@ -51,11 +49,14 @@ export class BalanceService {
             }
 
             const balance: Balance = {
-                assetType: asset.assetType,
-                symbol: asset.symbol,
-                description: asset.description,
-                free: freeBalance,
-                reserved: reservedBalance,
+              owner: publicKey,
+              network: network,
+              networkId: asset.networkId,
+              assetType: asset.assetType,
+              symbol: asset.symbol,
+              description: asset.description,
+              free: freeBalance,
+              reserved: reservedBalance,
             };
 
             balances.push(balance);

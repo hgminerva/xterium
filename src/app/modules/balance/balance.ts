@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Address } from '../../models/address';
 import { Balance } from '../../models/balance';
@@ -25,6 +26,7 @@ export class BalanceComponent {
   constructor(
     private cookieservice: CookieService,
     private balanceService: BalanceService,
+    private router: Router
   ) {
     if (this.cookieservice.check('addresses') == true) {
       this.addresses = JSON.parse(this.cookieservice.get('addresses'));
@@ -44,12 +46,16 @@ export class BalanceComponent {
       if (data.length > 0) {
         for(let i=0;i<data.length;i++) {
           this.balances.push({
+            owner: data[i].owner,
+            network: data[i].network,
+            networkId: data[i].networkId,
             assetType: data[i].assetType,
             symbol: data[i].symbol,
             description: data[i].description,
-            free: data[i].free,
-            reserved: data[i].reserved,
+            free: this.fixBalance(data[i].free,12),
+            reserved: this.fixBalance(data[i].reserved,12),
           })
+          this.cookieservice.set('balances',JSON.stringify(this.balances));
         }
       } 
     });
@@ -63,6 +69,15 @@ export class BalanceComponent {
   }
 
   transfer(assetIndex: number) {
+    this.router.navigateByUrl('/transfer/'+assetIndex.toString());
+  }
 
+  fixBalance(value: string, decimal: number): string {
+    let newValue: string = "";
+    let multiplier: number = 10 ** decimal;
+
+    newValue = (parseFloat(value)/multiplier).toString();
+
+    return newValue;
   }
 }

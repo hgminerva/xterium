@@ -6,7 +6,7 @@ import {AddressDetailComponent} from './modules/address-detail/address-detail';
 import {AssetComponent} from './modules/asset/asset';
 import {AssetDetailComponent} from './modules/asset-detail/asset-detail';
 import {BalanceComponent} from './modules/balance/balance';
-
+import {TransferComponent} from './modules/transfer/transfer';
 
 export const routes: Routes = [
     {
@@ -38,5 +38,10 @@ export const routes: Routes = [
         path: 'balance',
         component: BalanceComponent,
         title: 'Balance',
+    },    
+    {
+        path: 'transfer/:id',
+        component: TransferComponent,
+        title: 'Transfer',
     },    
 ];

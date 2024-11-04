@@ -20,6 +20,7 @@ export class AddressDetailComponent {
   
   addressType: string = "Xode";
   mnemonicKey: string = "";
+  seed: string;
   secretKey: string;
   publicKey: string;
 
@@ -37,6 +38,7 @@ export class AddressDetailComponent {
 
   saveToCookie(): void {
     const address: Address = {
+      seed: this.seed,
       secretKey: this.secretKey,
       publicKey: this.publicKey,
       addressType: this.addressType,
@@ -55,6 +57,7 @@ export class AddressDetailComponent {
     if(mnemonicValidate(this.mnemonicKey)) {
       const seed = mnemonicToMiniSecret(this.mnemonicKey);
       const { publicKey, secretKey } = sr25519PairFromSeed(seed);
+      this.seed = u8aToHex(seed);
       this.publicKey = encodeAddress(publicKey);
       this.secretKey = u8aToHex(secretKey);
     } else {

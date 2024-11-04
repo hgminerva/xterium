@@ -1,0 +1,21 @@
+<h1>Transfer</h1>
+<hr>
+<span class="footer">Network:</span><br> <span>{{balance?.network}}</span><br>
+<span class="footer">Owner:</span><br>  <span>{{balance?.owner}}</span><br>
+<span class="footer">Symbol:</span><br>  <span>{{balance?.symbol}}</span><br>
+<span class="footer">Description:</span><br>  <span>{{balance?.description}}</span><br>
+<span class="footer">Free Balance:</span><br>  <span>{{balance?.free}}</span><br>
+<span class="footer">Reserved Balance:</span><br>  <span>{{balance?.reserved}}</span>
+<hr>
+<span class="footer">Quantity:</span><br>  <span><input  [(ngModel)]="transferQuantity" type="number" [disabled]="readyToTransfer" /></span><br>    
+<span class="footer">Transfer To:</span><br>  <span><input  [(ngModel)]="transferToAddress" type="text"  [disabled]="readyToTransfer" style="width: 400px;"/></span>    
+<hr>
+<span  [hidden]="!isProcessing">Processing</span>
+<span [hidden]="isProcessing || !readyToTransfer">
+    <span class="footer">{{transferConfirmationMsg}}</span><br>
+    <button (click)="confirmTransfer()">Confirm</button>
+    <button (click)="cancelTransfer()">Cancel</button>
+</span>
+<span [hidden]="isProcessing || readyToTransfer"><button (click)="transfer()">Transfer</button></span>
+<hr>
+<span class="footer">{{message}}</span>
