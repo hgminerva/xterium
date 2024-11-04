@@ -103,8 +103,9 @@ export class TransferComponent {
 
   getEstimateFee(): void {
     this.transferService.getEstimateFee(this.balance.owner, 
-      parseFloat(this.transferQuantity),
-      this.transferToAddress).then(data => {
+      parseFloat(this.fixBalanceReverse(this.transferQuantity,12)),
+      this.transferToAddress,
+      this.balance).then(data => {
         this.isProcessing = false;
         this.transferConfirmationMsg = "The estimate fee is " + this.fixBalance(data.partialFee,12);
         this.readyToTransfer = true;
@@ -115,7 +116,8 @@ export class TransferComponent {
     this.isProcessing = true;
     this.transferService.transfer(this.balance.owner, 
       parseFloat(this.fixBalanceReverse(this.transferQuantity,12)),
-      this.transferToAddress).then(data => {
+      this.transferToAddress,
+      this.balance).then(data => {
         this.isProcessing = false;
         this.message = data;
         this.readyToTransfer = false;

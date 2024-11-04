@@ -15,24 +15,30 @@ export class TransferService {
     constructor(private cookieService: CookieService) { }
 
     // Estimate Fee
-    async getEstimateFee(sender: string, value: number, recipient: string) : Promise<SubstrateFee> {
+    async getEstimateFee(sender: string, value: number, recipient: string, balance: Balance) : Promise<SubstrateFee> {
         let substrateFee: SubstrateFee = new SubstrateFee();
 
         const rpc = this.cookieService.get('network');
         const wsProvider = new WsProvider(rpc);
         const api = await ApiPromise.create({ provider: wsProvider });
 
-        const info = await api.tx.balances['transfer'](recipient, value).paymentInfo(sender);
-
-        substrateFee.feeClass = info.class.toString();
-        substrateFee.weight = info.weight.toString();
-        substrateFee.partialFee = info.partialFee.toString();
-
+        if(balance.assetType=="Native") {
+          const info = await api.tx.balances['transfer'](recipient, value).paymentInfo(sender);
+          substrateFee.feeClass = info.class.toString();
+          substrateFee.weight = info.weight.toString();
+          substrateFee.partialFee = info.partialFee.toString();
+        } else {
+          const info = await api.tx.assets['transfer'](parseInt(balance.networkId),recipient, value).paymentInfo(sender);
+          substrateFee.feeClass = info.class.toString();
+          substrateFee.weight = info.weight.toString();
+          substrateFee.partialFee = info.partialFee.toString();
+        }
+      
         return substrateFee;
     }
 
     // Transfer
-    async transfer(sender: string, value: number, recipient: string): Promise<string> {
+    async transfer(sender: string, value: number, recipient: string, balance: Balance): Promise<string> {
       let returnMessage: string = "";
       let addresses: Array<Address> = [];
 
@@ -46,9 +52,16 @@ export class TransferService {
           if(address.publicKey == sender) {
             const keyring = new Keyring({ type: 'sr25519' });
             const signature = keyring.addFromUri(address.seed);
-            const transfer = api.tx.balances.transferAllowDeath(recipient, value);
-            const hash = await transfer.signAndSend(signature);
-            returnMessage = hash.toHex();
+
+            if(balance.assetType=="Native") {
+              const transfer = api.tx.balances.transferAllowDeath(recipient, value);
+              const hash = await transfer.signAndSend(signature);
+              returnMessage = hash.toHex(); 
+            } else {
+              const transfer = api.tx.assets.transfer(parseInt(balance.networkId), recipient, value);
+              const hash = await transfer.signAndSend(signature);
+              returnMessage = hash.toHex(); 
+            }
           }
         }
       } else {
